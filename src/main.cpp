@@ -1,9 +1,9 @@
 #include <iostream>
+#include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "common.hpp"
 #include "Pawn.hpp"
-
 
 
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren) {
@@ -12,6 +12,25 @@ SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren) {
         std::cout << "LoadTexture Error: " << SDL_GetError() << std::endl;
     }
     return texture;
+}
+
+Piece* getPieceAtPosition(int x, int y, const std::vector<Piece*>& pieces) {
+    for (Piece* piece : pieces) {
+        if (piece->getX() == x && piece->getY() == y) {
+            return piece;
+        }
+    }
+    return nullptr;
+}
+
+bool isValidMove(Piece* piece, int newX, int newY) {
+    std::vector<std::pair<int, int>> moves = piece->validMoves();
+    for (const auto& move : moves) {
+        if (move.first == newX && move.second == newY) {
+            return true;
+        }
+    }
+    return false;
 }
 
 int main(int argc, char *argv[]) {
@@ -54,12 +73,32 @@ int main(int argc, char *argv[]) {
     pieces.push_back(new Pawn(0, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
     pieces.push_back(new Pawn(0, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
 
+    Piece* selectedPiece = nullptr;
+
     SDL_Event event;
     bool isRunning = true;
     while (isRunning) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 isRunning = false;
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                int mouseX, mouseY;
+                SDL_GetMouseState(&mouseX, &mouseY);
+                int boardX = (mouseX - OFFSET_X) / (CHESSBOARD_SIZE / COLS);
+                int boardY = (mouseY - OFFSET_Y) / (CHESSBOARD_SIZE / ROWS);
+
+                if (boardX >= 0 && boardX < COLS && boardY >= 0 && boardY < ROWS) {
+                    if (selectedPiece == nullptr) {
+                        // Select piece
+                        selectedPiece = getPieceAtPosition(boardX, boardY, pieces);
+                    } else {
+                        // Check if move is valid
+                        if (isValidMove(selectedPiece, boardX, boardY)) {
+                            selectedPiece->setPosition(boardX, boardY);
+                        }
+                        selectedPiece = nullptr;
+                    }
+                }
             }
         }
 

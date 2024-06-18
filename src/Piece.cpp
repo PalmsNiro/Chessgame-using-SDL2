@@ -28,3 +28,33 @@ int Piece::getX() const { return x; }
 int Piece::getY() const { return y; }
 Color Piece::getColor() const { return color; }
 void Piece::setPosition(int x, int y) { this->x = x; this->y = y; }
+
+
+
+// //Pawns
+//     pieces.push_back(new Pawn(0, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(1, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(2, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(3, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(4, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(5, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(6, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(7, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+//     pieces.push_back(new Pawn(0, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+//     pieces.push_back(new Pawn(1, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+//     pieces.push_back(new Pawn(2, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+//     pieces.push_back(new Pawn(3, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+//     pieces.push_back(new Pawn(4, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+//     pieces.push_back(new Pawn(5, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+//     pieces.push_back(new Pawn(6, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+//     pieces.push_back(new Pawn(7, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    
+//     //Rooks(Towers)
+
+//     //Knights
+
+//     //Bishops
+
+//     //King
+
+//     //Queen
