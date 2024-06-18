@@ -1,31 +1,39 @@
-#ifndef PIECE_HPP_INCLUDED
-#define PIECE_HPP_INCLUDED
+#ifndef PIECE_HPP
+#define PIECE_HPP
 
-enum class PieceName
-{
-    Empty,
-    Pawn,
-    Knight,
-    Bishop,
-    Rook,
-    Queen,
-    King
-};
+#include <vector>
+#include <string>
+#include <SDL2/SDL.h>
+#include "common.hpp"
 
-class Piece
-{
+enum class Color { WHITE, BLACK };
+
+class Piece {
 protected:
-    PieceName name = PieceName::Empty;
-    bool isWhite = false;
-    int position_X = -1;
-    int position_Y = -1;
-    bool isAlive = false;
-
+    int x, y;
+    Color color;
+    std::string texturePath;
+    SDL_Texture* texture;
 public:
-    Piece();
-    ~Piece();
-    
+    Piece(int x, int y, Color color, const std::string& texturePath);
+    virtual ~Piece();
 
+    virtual std::vector<std::pair<int, int>> validMoves() const = 0;
+    void render(SDL_Renderer* renderer);
+
+    int getX() const;
+    int getY() const;
+    Color getColor() const;
+    void setPosition(int x, int y);
+
+    // virtual void draw(SDL_Renderer *renderer)
+    // {
+    //     SDL_Rect destRect = {x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE};
+    //     SDL_RenderCopy(renderer, texture, NULL, &destRect);
+    // }
+    // virtual bool isValidMove(int newX, int newY) = 0;
 };
 
-#endif
+#endif // PIECE_HPP
+
+    
