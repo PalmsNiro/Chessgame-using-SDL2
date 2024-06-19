@@ -5,7 +5,7 @@ LDFLAGS = -L libraries/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 # Ziel und Quell-Dateien
 TARGET = main
-SOURCES = src/main.cpp src/Chessboard.cpp src/Piece.cpp src/Pawn.cpp src/Rook.cpp src/Game.cpp
+SOURCES = src/main.cpp src/Chessboard.cpp src/Piece.cpp src/Pawn.cpp src/Rook.cpp src/Game.cpp src/Utils.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Standardregel
@@ -34,6 +34,9 @@ src/Rook.o: src/Rook.cpp
 src/Game.o: src/Game.cpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
+src/Utils.o: src/Utils.cpp
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
+
 # Regel zum Aufräumen
 clean:
 	@echo "Cleaning up..."
@@ -44,6 +47,7 @@ clean:
 	@if [ -f src/Pawn.o ]; then rm src/Pawn.o; fi
 	@if [ -f src/Rook.o ]; then rm src/Rook.o; fi
 	@if [ -f src/Game.o ]; then rm src/Game.o; fi
+	@if [ -f src/Utils.o ]; then rm src/Utils.o; fi
 	@echo "Clean done."
 
 # Phony targets (diese werden immer ausgeführt, auch wenn eine Datei gleichen Namens existiert)

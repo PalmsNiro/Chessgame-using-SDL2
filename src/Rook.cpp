@@ -1,4 +1,5 @@
 #include "Rook.hpp"
+#include "Utils.hpp"
 
 Rook::Rook(PieceName name, int x, int y, Color color, const std::string &texturePath) : Piece(name, x, y, color, texturePath) {}
 
@@ -14,87 +15,17 @@ std::vector<std::pair<int, int>> Rook::validMoves(const Chessboard &chessboard) 
     int y = this->getY();
     Color color = this->getColor();
 
-    std::cout << "Rook at (" << x << ", " << y << ")\n";
+    // Directions for Rook (north, east, south, west)
+    std::vector<std::pair<int, int>> directions = {
+        {0, -1}, // North
+        {1, 0},  // East
+        {0, 1},  // South
+        {-1, 0}  // West
+    };
 
-    bool northDone = false;
-    bool eastDone = false;
-    bool southDone = false;
-    bool westDone = false;
-    Piece *piece = nullptr;
-
-    for (int i = 1; i < 8; i++) {
-        // Check North
-        if (!northDone) {
-            int newY = y - i;
-            if (newY >= 0) {
-                piece = chessboard.getPieceAt(x, newY);
-                // std::cout << "Piece at (" << x << ", " << newY << ")\n";
-                if (piece == nullptr) {
-                    moves.emplace_back(x, newY);
-                } else if (color != piece->getColor()) {
-                    moves.emplace_back(x, newY);
-                    northDone = true;
-                } else {
-                    northDone = true;
-                }
-            } else {
-                northDone = true;
-            }
-        }
-
-        // Check East
-        if (!eastDone) {
-            int newX = x + i;
-            if (newX < 8) {
-                piece = chessboard.getPieceAt(newX, y);
-                if (piece == nullptr) {
-                    moves.emplace_back(newX, y);
-                } else if (color != piece->getColor()) {
-                    moves.emplace_back(newX, y);
-                    eastDone = true;
-                } else {
-                    eastDone = true;
-                }
-            } else {
-                eastDone = true;
-            }
-        }
-
-        // Check South
-        if (!southDone) {
-            int newY = y + i;
-            if (newY < 8) {
-                piece = chessboard.getPieceAt(x, newY);
-                if (piece == nullptr) {
-                    moves.emplace_back(x, newY);
-                } else if (color != piece->getColor()) {
-                    moves.emplace_back(x, newY);
-                    southDone = true;
-                } else {
-                    southDone = true;
-                }
-            } else {
-                southDone = true;
-            }
-        }
-
-        // Check West
-        if (!westDone) {
-            int newX = x - i;
-            if (newX >= 0) {
-                piece = chessboard.getPieceAt(newX, y);
-                if (piece == nullptr) {
-                    moves.emplace_back(newX, y);
-                } else if (color != piece->getColor()) {
-                    moves.emplace_back(newX, y);
-                    westDone = true;
-                } else {
-                    westDone = true;
-                }
-            } else {
-                westDone = true;
-            }
-        }
+    for (const auto &direction : directions) {
+        checkDirection(x, y, direction.first, direction.second, 7, chessboard, color, moves);
     }
+
     return moves;
 }
