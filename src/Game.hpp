@@ -6,7 +6,9 @@
 #include <iostream>
 #include <vector>
 #include "common.hpp"
+#include "Chessboard.hpp"
 #include "Pawn.hpp"
+#include "Piece.hpp"
 
 class Game
 {
@@ -18,6 +20,8 @@ public:
     SDL_Renderer *renderer;
     SDL_Texture *backgroundTexture;
 
+    Chessboard chessboard;
+
     std::vector<Piece *> piecesAlive;
     std::vector<Piece *> piecesDead;
 
@@ -27,5 +31,8 @@ public:
 
     void createPieces();
     Piece *removePieceFromBoard(int boardX, int boardY);
+    bool isValidMove(Piece *piece, int newX, int newY);
+    void movePiece(Piece *piece, int newX, int newY);
+
 };
 #endif

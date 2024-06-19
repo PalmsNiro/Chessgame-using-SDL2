@@ -5,7 +5,7 @@ LDFLAGS = -L libraries/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 # Ziel und Quell-Dateien
 TARGET = main
-SOURCES = src/main.cpp src/Chessboard.cpp src/Piece.cpp src/Pawn.cpp src/Game.cpp
+SOURCES = src/main.cpp src/Chessboard.cpp src/Piece.cpp src/Pawn.cpp src/Rook.cpp src/Game.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Standardregel
@@ -28,6 +28,9 @@ src/Piece.o: src/Piece.cpp
 src/Pawn.o: src/Pawn.cpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
+src/Rook.o: src/Rook.cpp
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
+
 src/Game.o: src/Game.cpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
@@ -39,6 +42,7 @@ clean:
 	@if [ -f src/Chessboard.o ]; then rm src/Chessboard.o; fi
 	@if [ -f src/Piece.o ]; then rm src/Piece.o; fi
 	@if [ -f src/Pawn.o ]; then rm src/Pawn.o; fi
+	@if [ -f src/Rook.o ]; then rm src/Rook.o; fi
 	@if [ -f src/Game.o ]; then rm src/Game.o; fi
 	@echo "Clean done."
 

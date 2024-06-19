@@ -1,3 +1,27 @@
+// Chessboard.cpp
+#include "Chessboard.hpp"
+
+Chessboard::Chessboard(){};
+
+Chessboard::Chessboard(int width, int height) {
+    board.resize(width, std::vector<Piece*>(height, nullptr));
+}
+
+Piece* Chessboard::getPieceAt(int x, int y) const {
+    if (x < 0 || x >= board.size() || y < 0 || y >= board[0].size()) {
+        return nullptr;
+    }
+    return board[x][y];
+}
+
+void Chessboard::setPieceAt(int x, int y, Piece* piece) {
+    if (x >= 0 && x < board.size() && y >= 0 && y < board[0].size()) {
+        board[x][y] = piece;
+    }
+}
+
+
+
 // void drawChessboard(SDL_Renderer* renderer) {
 //     bool isDarkbrown = false;
 //     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); // Black background

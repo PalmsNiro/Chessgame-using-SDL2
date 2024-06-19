@@ -1,22 +1,16 @@
 #include "Game.hpp"
 
-// When calling constructor in main with new, Init gets called
-Game::Game()
+Game::Game() : chessboard(8, 8)
 {
     Init();
-};
+}
 
 Game::~Game()
 {
-    std::cout << "Desctructor called";
+    std::cout << "Destructor called";
     Close();
-};
+}
 
-/*
-
-    * class functions
-
-*/
 SDL_Texture *loadTexture(const std::string &file, SDL_Renderer *ren)
 {
     SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
@@ -39,28 +33,6 @@ Piece *getPieceAtPosition(int x, int y, const std::vector<Piece *> &pieces)
     return nullptr;
 }
 
-bool isValidMove(Piece *piece, int newX, int newY)
-{
-    std::vector<std::pair<int, int>> moves = piece->validMoves();
-    for (const auto &move : moves)
-    {
-        if (move.first == newX && move.second == newY)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-/*
-
-    class Methods
-
-*/
-
-/*
-    Game::Init
-*/
 int Game::Init()
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -105,9 +77,6 @@ int Game::Init()
     return EXIT_SUCCESS;
 }
 
-/*
-    Game::Run
-*/
 int Game::Run()
 {
     this->createPieces();
@@ -131,20 +100,18 @@ int Game::Run()
                 int boardX = (mouseX - OFFSET_X) / (CHESSBOARD_SIZE / COLS);
                 int boardY = (mouseY - OFFSET_Y) / (CHESSBOARD_SIZE / ROWS);
 
-                if (boardX >= 0 && boardX < COLS && boardY >= 0 && boardY < ROWS) // If click is on ChessBoard
+                if (boardX >= 0 && boardX < COLS && boardY >= 0 && boardY < ROWS)
                 {
-                    if (selectedPiece == nullptr) // If no piece has been selected(clicked on) yet
+                    if (selectedPiece == nullptr)
                     {
-                        // Select piece clicked on
                         selectedPiece = getPieceAtPosition(boardX, boardY, piecesAlive);
                     }
-                    else // a piece has been selected and the next click is where we put it down if possible
+                    else
                     {
-                        // Check if move is valid
                         if (isValidMove(selectedPiece, boardX, boardY))
                         {
-                            this->removePieceFromBoard(boardX, boardY);
-                            selectedPiece->setPosition(boardX, boardY);
+                            this->removePieceFromBoard(boardX, boardY); // Remove any piece at the target position
+                            movePiece(selectedPiece, boardX, boardY);   // Move the selected piece
                         }
                         selectedPiece = nullptr;
                     }
@@ -152,34 +119,27 @@ int Game::Run()
             }
         }
 
-        // Render the black background
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
-        // Render the chessboard image in the center
         SDL_Rect chessboardRect = {OFFSET_X, OFFSET_Y, CHESSBOARD_SIZE, CHESSBOARD_SIZE};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &chessboardRect);
 
-        // Render chess pieces
         for (Piece *piece : piecesAlive)
         {
             piece->render(renderer);
         }
 
-        SDL_RenderPresent(renderer); // Present the current rendering
+        SDL_RenderPresent(renderer);
 
-        SDL_Delay(1000 / 60); // Delay to limit the frame rate to 60 FPS
+        SDL_Delay(1000 / 60);
     }
 
     return EXIT_SUCCESS;
 }
 
-/*
-    Game::Close
-*/
 int Game::Close()
 {
-    // Clean up
     for (Piece *piece : piecesAlive)
     {
         delete piece;
@@ -196,15 +156,35 @@ int Game::Close()
 
 void Game::createPieces()
 {
-    // Create the pieces
-    piecesAlive.push_back(new Pawn(0, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
-    piecesAlive.push_back(new Pawn(0, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 0, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 1, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 2, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 3, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 4, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 5, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 6, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 7, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
+
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 0, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 1, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 2, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 3, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 4, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 5, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 6, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+    piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 7, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+
+    for (auto piece : piecesAlive)
+    {
+        chessboard.setPieceAt(piece->getX(), piece->getY(), piece);
+    }
 }
 
 Piece *Game::removePieceFromBoard(int boardX, int boardY)
 {
     Piece *removedPiece = nullptr;
 
+    //
     for (auto it = piecesAlive.begin(); it != piecesAlive.end(); ++it)
     {
         Piece *piece = *it;
@@ -216,6 +196,33 @@ Piece *Game::removePieceFromBoard(int boardX, int boardY)
             break;
         }
     }
-
+    chessboard.setPieceAt(boardX, boardY, nullptr);
     return removedPiece;
+}
+
+bool Game::isValidMove(Piece *piece, int newX, int newY)
+{
+    std::cout << "Arrived in validMoves() Method\n";
+    std::vector<std::pair<int, int>> moves = piece->validMoves(chessboard);
+    std::cout << "Entering for Loop\n";
+    for (const auto &move : moves)
+    {
+        if (move.first == newX && move.second == newY)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Game::movePiece(Piece *piece, int newX, int newY)
+{
+    // Clear the piece's current position on the board
+    chessboard.setPieceAt(piece->getX(), piece->getY(), nullptr);
+
+    // Set the piece's new position
+    piece->setPosition(newX, newY);
+
+    // Place the piece in the new position on the board
+    chessboard.setPieceAt(newX, newY, piece);
 }
