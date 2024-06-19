@@ -6,12 +6,13 @@
 #include <vector>
 #include <utility>
 
-class Tower : public Piece
+class Rook : public Piece
 {
-    Tower(PieceName name, int x, int y, Color color, const std::string& texturePath);
+public:
+    Rook(PieceName name, int x, int y, Color color, const std::string &texturePath);
 
-    bool isPathClear(const Chessboard& board, Color color) const override;
-    std::vector<std::pair<int, int>> validMoves(const Chessboard& chessboard) const override;
+    bool isPathClear(const Chessboard &board, Color color) const override;
+    std::vector<std::pair<int, int>> validMoves(const Chessboard &chessboard) const override;
 };
 
 #endif

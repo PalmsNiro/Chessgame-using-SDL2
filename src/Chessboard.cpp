@@ -1,7 +1,7 @@
 // Chessboard.cpp
 #include "Chessboard.hpp"
 
-Chessboard::Chessboard(){};
+// Chessboard::Chessboard(){};
 
 Chessboard::Chessboard(int width, int height) {
     board.resize(width, std::vector<Piece*>(height, nullptr));

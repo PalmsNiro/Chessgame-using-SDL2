@@ -11,7 +11,7 @@ class Chessboard {
 public:
     std::vector<std::vector<Piece*>> board;
     
-    Chessboard();
+    // Chessboard();
     Chessboard(int width, int height);
 
     Piece* getPieceAt(int x, int y) const;

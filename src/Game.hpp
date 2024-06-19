@@ -8,6 +8,7 @@
 #include "common.hpp"
 #include "Chessboard.hpp"
 #include "Pawn.hpp"
+#include "Rook.hpp"
 #include "Piece.hpp"
 
 class Game

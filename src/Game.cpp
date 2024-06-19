@@ -156,6 +156,7 @@ int Game::Close()
 
 void Game::createPieces()
 {
+    //Pawns
     piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 0, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
     piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 1, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
     piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 2, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
@@ -173,6 +174,12 @@ void Game::createPieces()
     piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 5, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
     piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 6, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
     piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 7, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
+
+    //Towers
+    piecesAlive.push_back(new Rook(PieceName::ROOK_WHITE, 0, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Rook.png"));
+    piecesAlive.push_back(new Rook(PieceName::ROOK_WHITE, 7, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Rook.png"));
+    piecesAlive.push_back(new Rook(PieceName::ROOK_BLACK, 0, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Rook.png"));
+    piecesAlive.push_back(new Rook(PieceName::ROOK_BLACK, 7, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Rook.png"));
 
     for (auto piece : piecesAlive)
     {
@@ -202,9 +209,7 @@ Piece *Game::removePieceFromBoard(int boardX, int boardY)
 
 bool Game::isValidMove(Piece *piece, int newX, int newY)
 {
-    std::cout << "Arrived in validMoves() Method\n";
     std::vector<std::pair<int, int>> moves = piece->validMoves(chessboard);
-    std::cout << "Entering for Loop\n";
     for (const auto &move : moves)
     {
         if (move.first == newX && move.second == newY)
