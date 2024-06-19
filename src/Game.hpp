@@ -9,6 +9,9 @@
 #include "Chessboard.hpp"
 #include "Pawn.hpp"
 #include "Rook.hpp"
+#include "Bishop.hpp"
+#include "Knight.hpp"
+#include "Queen.hpp"
 #include "Piece.hpp"
 
 class Game

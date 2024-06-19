@@ -117,7 +117,7 @@ int Game::Run()
                         {
                             this->removePieceFromBoard(boardX, boardY); // Remove any piece at the target position
                             movePiece(selectedPiece, boardX, boardY);   // Move the selected piece
-                            
+
                             // Switch turnColor after a valid move
                             turnColor = (turnColor == Color::WHITE) ? Color::BLACK : Color::WHITE;
                         }
@@ -188,6 +188,22 @@ void Game::createPieces()
     piecesAlive.push_back(new Rook(PieceName::ROOK_WHITE, 7, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Rook.png"));
     piecesAlive.push_back(new Rook(PieceName::ROOK_BLACK, 0, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Rook.png"));
     piecesAlive.push_back(new Rook(PieceName::ROOK_BLACK, 7, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Rook.png"));
+
+    // Bishops
+    piecesAlive.push_back(new Bishop(PieceName::BISHOP_WHITE, 2, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Bishop.png"));
+    piecesAlive.push_back(new Bishop(PieceName::BISHOP_WHITE, 5, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Bishop.png"));
+    piecesAlive.push_back(new Bishop(PieceName::BISHOP_BLACK, 2, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Bishop.png"));
+    piecesAlive.push_back(new Bishop(PieceName::BISHOP_BLACK, 5, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Bishop.png"));
+
+    // Knights
+    piecesAlive.push_back(new Knight(PieceName::KNIGHT_WHITE, 1, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Knight.png"));
+    piecesAlive.push_back(new Knight(PieceName::KNIGHT_WHITE, 6, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Knight.png"));
+    piecesAlive.push_back(new Knight(PieceName::KNIGHT_BLACK, 1, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Knight.png"));
+    piecesAlive.push_back(new Knight(PieceName::KNIGHT_BLACK, 6, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Knight.png"));
+
+    // Queen
+    piecesAlive.push_back(new Queen(PieceName::QUEEN_WHITE, 3, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Queen.png"));
+    piecesAlive.push_back(new Queen(PieceName::QUEEN_BLACK, 3, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Queen.png"));
 
     for (auto piece : piecesAlive)
     {

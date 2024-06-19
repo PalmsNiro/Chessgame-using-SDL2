@@ -5,8 +5,7 @@ Rook::Rook(PieceName name, int x, int y, Color color, const std::string &texture
 
 bool Rook::isPathClear(const Chessboard &board, Color color) const
 {
-
-    return false;
+    return true;
 }
 
 std::vector<std::pair<int, int>> Rook::validMoves(const Chessboard &chessboard) const {

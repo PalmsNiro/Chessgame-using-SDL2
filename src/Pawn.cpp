@@ -33,6 +33,7 @@ bool Pawn::hasCrossRightOponent(const Chessboard &chessboard, Color color) const
     {
         return true;
     }
+    delete piece;
     return false;
 }
 
@@ -50,6 +51,7 @@ bool Pawn::hasCrossLeftOponent(const Chessboard &chessboard, Color color) const
     {
         return true;
     }
+    delete piece;
     return false;
 }
 
