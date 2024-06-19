@@ -82,6 +82,7 @@ int Game::Run()
     this->createPieces();
 
     Piece *selectedPiece = nullptr;
+    Color turnColor = Color::WHITE; // Initialize turnColor
 
     SDL_Event event;
     bool isRunning = true;
@@ -104,14 +105,21 @@ int Game::Run()
                 {
                     if (selectedPiece == nullptr)
                     {
-                        selectedPiece = getPieceAtPosition(boardX, boardY, piecesAlive);
+                        Piece *pieceClickedOn = getPieceAtPosition(boardX, boardY, piecesAlive);
+                        if (pieceClickedOn && pieceClickedOn->getColor() == turnColor)
+                        {
+                            selectedPiece = pieceClickedOn;
+                        }
                     }
-                    else
+                    else if (selectedPiece != nullptr)
                     {
                         if (isValidMove(selectedPiece, boardX, boardY))
                         {
                             this->removePieceFromBoard(boardX, boardY); // Remove any piece at the target position
                             movePiece(selectedPiece, boardX, boardY);   // Move the selected piece
+                            
+                            // Switch turnColor after a valid move
+                            turnColor = (turnColor == Color::WHITE) ? Color::BLACK : Color::WHITE;
                         }
                         selectedPiece = nullptr;
                     }
@@ -156,7 +164,7 @@ int Game::Close()
 
 void Game::createPieces()
 {
-    //Pawns
+    // Pawns
     piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 0, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
     piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 1, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
     piecesAlive.push_back(new Pawn(PieceName::PAWN_WHITE, 2, 6, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Pawn.png"));
@@ -175,7 +183,7 @@ void Game::createPieces()
     piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 6, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
     piecesAlive.push_back(new Pawn(PieceName::PAWN_BLACK, 7, 1, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Pawn.png"));
 
-    //Towers
+    // Towers
     piecesAlive.push_back(new Rook(PieceName::ROOK_WHITE, 0, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Rook.png"));
     piecesAlive.push_back(new Rook(PieceName::ROOK_WHITE, 7, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Rook.png"));
     piecesAlive.push_back(new Rook(PieceName::ROOK_BLACK, 0, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Rook.png"));

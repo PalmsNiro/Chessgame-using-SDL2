@@ -14,6 +14,7 @@
 class Game
 {
 public:
+
     Game();
     ~Game();
 
@@ -34,6 +35,5 @@ public:
     Piece *removePieceFromBoard(int boardX, int boardY);
     bool isValidMove(Piece *piece, int newX, int newY);
     void movePiece(Piece *piece, int newX, int newY);
-
 };
 #endif

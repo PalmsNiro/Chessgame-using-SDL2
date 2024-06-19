@@ -10,8 +10,8 @@
 
 enum class Color
 {
-    WHITE,
-    BLACK
+    WHITE = 0,
+    BLACK = 1
 };
 
 enum class PieceName
