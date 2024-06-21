@@ -2,7 +2,8 @@
 
 Game::Game() : chessboard(8, 8)
 {
-    Init();
+    if (Init())
+        std::cout << "Init() failed";
 }
 
 Game::~Game()
@@ -21,17 +22,17 @@ SDL_Texture *loadTexture(const std::string &file, SDL_Renderer *ren)
     return texture;
 }
 
-Piece *getPieceAtPosition(int x, int y, const std::vector<Piece *> &pieces)
-{
-    for (Piece *piece : pieces)
-    {
-        if (piece->getX() == x && piece->getY() == y)
-        {
-            return piece;
-        }
-    }
-    return nullptr;
-}
+// Piece *getPieceAtPosition(int x, int y, const std::vector<Piece *> &pieces)
+// {
+//     for (Piece *piece : pieces)
+//     {
+//         if (piece->getX() == x && piece->getY() == y)
+//         {
+//             return piece;
+//         }
+//     }
+//     return nullptr;
+// }
 
 int Game::Init()
 {
@@ -55,7 +56,7 @@ int Game::Init()
         return EXIT_FAILURE;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL)
     {
         std::cout << "Error: " << SDL_GetError() << std::endl;
@@ -63,6 +64,9 @@ int Game::Init()
         SDL_Quit();
         return EXIT_FAILURE;
     }
+
+    // Enable blending mode for the renderer
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     backgroundTexture = loadTexture("images/board/blue-marble.jpg", renderer);
     if (backgroundTexture == nullptr)
@@ -82,7 +86,7 @@ int Game::Run()
     this->createPieces();
 
     Piece *selectedPiece = nullptr;
-    Color turnColor = Color::WHITE; // Initialize turnColor
+    Color turnColor = Color::WHITE;
 
     SDL_Event event;
     bool isRunning = true;
@@ -105,13 +109,13 @@ int Game::Run()
                 {
                     if (selectedPiece == nullptr)
                     {
-                        Piece *pieceClickedOn = getPieceAtPosition(boardX, boardY, piecesAlive);
-                        if (pieceClickedOn && pieceClickedOn->getColor() == turnColor)
+                        Piece *pieceClickedOn = chessboard.getPieceAt(boardX, boardY);
+                        if (pieceClickedOn && pieceClickedOn->getColor() == turnColor && pieceClickedOn->validMoves(chessboard).size())
                         {
                             selectedPiece = pieceClickedOn;
 
                             // Show valid moves
-                            availableMoves=selectedPiece->validMoves(chessboard);
+                            this->showAvailAbleMoves(selectedPiece->validMoves(chessboard));
                         }
                     }
                     else if (selectedPiece != nullptr)
@@ -121,42 +125,48 @@ int Game::Run()
                             this->removePieceFromBoard(boardX, boardY); // Remove any piece at the target position
                             movePiece(selectedPiece, boardX, boardY);   // Move the selected piece
 
-                            // Switch turnColor after a valid move
+                            // Switch turn color
                             turnColor = (turnColor == Color::WHITE) ? Color::BLACK : Color::WHITE;
                         }
                         selectedPiece = nullptr;
                         availableMoves.clear(); // Clear available moves after a move is made
                     }
                 }
-                //print board
-                this->printBoard();
             }
         }
 
+        // Clear the screen
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
+        // Render the chessboard background
         SDL_Rect chessboardRect = {OFFSET_X, OFFSET_Y, CHESSBOARD_SIZE, CHESSBOARD_SIZE};
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &chessboardRect);
 
-        for (Piece *piece : piecesAlive)
-        {
-            piece->render(renderer);
-        }
-
-        // Render available moves
-        SDL_SetRenderDrawColor(renderer, 66, 245, 96, SDL_ALPHA_OPAQUE);
+        // Render available moves with transparency
+        SDL_SetRenderDrawColor(renderer, 66, 245, 96, 128); // 128 is for 50% transparency
         for (const auto &move : availableMoves)
         {
-            int row = move.second;
             int col = move.first;
+            int row = move.second;
 
             SDL_Rect square = {OFFSET_X + col * (CHESSBOARD_SIZE / COLS), OFFSET_Y + row * (CHESSBOARD_SIZE / ROWS), CHESSBOARD_SIZE / COLS, CHESSBOARD_SIZE / ROWS};
             SDL_RenderFillRect(renderer, &square);
         }
 
+        // Render the pieces on top of the available move fields
+        for (Piece *piece : piecesAlive)
+        {
+            if (piece != nullptr) // Ensure piece is not null
+            {
+                piece->render(renderer);
+            }
+        }
+
+        // Present the rendered frame
         SDL_RenderPresent(renderer);
 
+        // Delay to limit the frame rate to 60 FPS
         SDL_Delay(1000 / 60);
     }
 
@@ -267,6 +277,8 @@ bool Game::isValidMove(Piece *piece, int newX, int newY)
 
 void Game::movePiece(Piece *piece, int newX, int newY)
 {
+    std::cout << "Moving piece from (" << piece->getX() << ", " << piece->getY() << ") to (" << newX << ", " << newY << ")" << std::endl;
+
     // Clear the piece's current position on the board
     chessboard.setPieceAt(piece->getX(), piece->getY(), nullptr);
 
@@ -275,20 +287,29 @@ void Game::movePiece(Piece *piece, int newX, int newY)
 
     // Place the piece in the new position on the board
     chessboard.setPieceAt(newX, newY, piece);
+
+    std::cout << "Piece moved to (" << newX << ", " << newY << ")" << std::endl;
 }
 
-void Game::showAvailAbleMoves(const std::vector<std::pair<int, int>> &moves) {
+void Game::showAvailAbleMoves(const std::vector<std::pair<int, int>> &moves)
+{
     availableMoves = moves; // Store the moves to be rendered later
 }
 
-void Game::printBoard() {
+void Game::printBoard()
+{
     std::cout << "------------------------------------------------\n";
-    for (int y = 0; y < chessboard.board.size(); ++y) {
-        for (int x = 0; x < chessboard.board[y].size(); ++x) {
-            Piece* piece = chessboard.getPieceAt(x, y);
-            if (piece) {
+    for (int y = 0; y < chessboard.board.size(); ++y)
+    {
+        for (int x = 0; x < chessboard.board[y].size(); ++x)
+        {
+            Piece *piece = chessboard.getPieceAt(x, y);
+            if (piece)
+            {
                 std::cout << piece->getSymbol() << " ";
-            } else {
+            }
+            else
+            {
                 std::cout << ". ";
             }
         }
