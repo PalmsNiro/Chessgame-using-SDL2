@@ -97,6 +97,7 @@ int Game::Run()
             if (event.type == SDL_QUIT)
             {
                 isRunning = false;
+                return EXIT_FAILURE; // Indicate that the game was interrupted
             }
             else if (event.type == SDL_MOUSEBUTTONDOWN)
             {
@@ -158,8 +159,8 @@ int Game::Run()
         for (Piece *piece : piecesAlive)
         {
             if (piece != nullptr) // Ensure piece is not null
-            {
-                piece->render(renderer);
+        {
+            piece->render(renderer);
             }
         }
 
