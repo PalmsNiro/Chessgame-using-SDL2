@@ -14,8 +14,6 @@ std::vector<std::pair<int, int>> Knight::validMoves(const Chessboard &chessboard
     int x = this->getX();
     int y = this->getY();
     Color color = this->getColor();
-    std::cout << "X: " << x << " ";
-    std::cout << "Y: " << y << "\n";
 
     // Directions for Knight
     std::vector<std::pair<int, int>> directions = {
@@ -32,14 +30,10 @@ std::vector<std::pair<int, int>> Knight::validMoves(const Chessboard &chessboard
     int newX;
     int newY;
 
-    // std::cout << "entering for loop";
     for (const auto &direction : directions)
     {
-        std::cout << "direction: x:" << direction.first << " y:" << direction.second << "\n";
         newX = x + direction.first;
         newY = y + direction.second;
-        std::cout << "newX: " << newX << " ";
-        std::cout << "newY: " << newY << "\n";
         if (newX >= 0 && newX < chessboard.board.size() && newY >= 0 && newY < chessboard.board[0].size()) // check if new point is in bounds
         {
             Piece *piece = chessboard.getPieceAt(newX, newY);
@@ -51,7 +45,5 @@ std::vector<std::pair<int, int>> Knight::validMoves(const Chessboard &chessboard
         }
     }
 
-
-    std::cout << "returning moves";
     return moves;
 }

@@ -16,18 +16,18 @@ enum class Color
 
 enum class PieceName
 {
-    BISHOP_WHITE,
-    KING_WHITE,
-    KNIGHT_WHITE,
-    PAWN_WHITE,
-    QUEEN_WHITE,
-    ROOK_WHITE,
-    BISHOP_BLACK,
-    KING_BLACK,
-    KNIGHT_BLACK,
-    PAWN_BLACK,
-    QUEEN_BLACK,
-    ROOK_BLACK
+    BISHOP_WHITE='B',
+    KING_WHITE='K',
+    KNIGHT_WHITE='K',
+    PAWN_WHITE='P',
+    QUEEN_WHITE='Q',
+    ROOK_WHITE='R',
+    BISHOP_BLACK='B',
+    KING_BLACK='K',
+    KNIGHT_BLACK='K',
+    PAWN_BLACK='P',
+    QUEEN_BLACK='Q',
+    ROOK_BLACK='R'
 };
 
 class Piece
@@ -50,8 +50,9 @@ public:
     int getX() const;
     int getY() const;
     Color getColor() const;
+    PieceName getPieceName() const;
     void setPosition(int x, int y);
-
+    char getSymbol();
     // virtual void draw(SDL_Renderer *renderer)
     // {
     //     SDL_Rect destRect = {x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE};

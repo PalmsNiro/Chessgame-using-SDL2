@@ -12,6 +12,7 @@
 #include "Bishop.hpp"
 #include "Knight.hpp"
 #include "Queen.hpp"
+#include "King.hpp"
 #include "Piece.hpp"
 
 class Game
@@ -30,6 +31,8 @@ public:
     std::vector<Piece *> piecesAlive;
     std::vector<Piece *> piecesDead;
 
+    std::vector<std::pair<int, int>> availableMoves; // Store available moves here
+
     int Init();
     int Run();
     int Close();
@@ -38,5 +41,7 @@ public:
     Piece *removePieceFromBoard(int boardX, int boardY);
     bool isValidMove(Piece *piece, int newX, int newY);
     void movePiece(Piece *piece, int newX, int newY);
+    void showAvailAbleMoves(const std::vector<std::pair<int, int>> &moves);
+    void printBoard();
 };
 #endif

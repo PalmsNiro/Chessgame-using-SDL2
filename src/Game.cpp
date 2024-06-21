@@ -109,6 +109,9 @@ int Game::Run()
                         if (pieceClickedOn && pieceClickedOn->getColor() == turnColor)
                         {
                             selectedPiece = pieceClickedOn;
+
+                            // Show valid moves
+                            availableMoves=selectedPiece->validMoves(chessboard);
                         }
                     }
                     else if (selectedPiece != nullptr)
@@ -122,8 +125,11 @@ int Game::Run()
                             turnColor = (turnColor == Color::WHITE) ? Color::BLACK : Color::WHITE;
                         }
                         selectedPiece = nullptr;
+                        availableMoves.clear(); // Clear available moves after a move is made
                     }
                 }
+                //print board
+                this->printBoard();
             }
         }
 
@@ -136,6 +142,17 @@ int Game::Run()
         for (Piece *piece : piecesAlive)
         {
             piece->render(renderer);
+        }
+
+        // Render available moves
+        SDL_SetRenderDrawColor(renderer, 66, 245, 96, SDL_ALPHA_OPAQUE);
+        for (const auto &move : availableMoves)
+        {
+            int row = move.second;
+            int col = move.first;
+
+            SDL_Rect square = {OFFSET_X + col * (CHESSBOARD_SIZE / COLS), OFFSET_Y + row * (CHESSBOARD_SIZE / ROWS), CHESSBOARD_SIZE / COLS, CHESSBOARD_SIZE / ROWS};
+            SDL_RenderFillRect(renderer, &square);
         }
 
         SDL_RenderPresent(renderer);
@@ -205,6 +222,10 @@ void Game::createPieces()
     piecesAlive.push_back(new Queen(PieceName::QUEEN_WHITE, 3, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-Queen.png"));
     piecesAlive.push_back(new Queen(PieceName::QUEEN_BLACK, 3, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-Queen.png"));
 
+    // Kings
+    piecesAlive.push_back(new King(PieceName::KING_WHITE, 4, 7, Color::WHITE, "images/staunton/piece/CubesAndPi/White-King.png"));
+    piecesAlive.push_back(new King(PieceName::KING_BLACK, 4, 0, Color::BLACK, "images/staunton/piece/CubesAndPi/Black-King.png"));
+
     for (auto piece : piecesAlive)
     {
         chessboard.setPieceAt(piece->getX(), piece->getY(), piece);
@@ -254,4 +275,23 @@ void Game::movePiece(Piece *piece, int newX, int newY)
 
     // Place the piece in the new position on the board
     chessboard.setPieceAt(newX, newY, piece);
+}
+
+void Game::showAvailAbleMoves(const std::vector<std::pair<int, int>> &moves) {
+    availableMoves = moves; // Store the moves to be rendered later
+}
+
+void Game::printBoard() {
+    std::cout << "------------------------------------------------\n";
+    for (int y = 0; y < chessboard.board.size(); ++y) {
+        for (int x = 0; x < chessboard.board[y].size(); ++x) {
+            Piece* piece = chessboard.getPieceAt(x, y);
+            if (piece) {
+                std::cout << piece->getSymbol() << " ";
+            } else {
+                std::cout << ". ";
+            }
+        }
+        std::cout << std::endl;
+    }
 }

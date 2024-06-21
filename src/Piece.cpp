@@ -33,8 +33,14 @@ void Piece::render(SDL_Renderer *renderer)
 int Piece::getX() const { return x; }
 int Piece::getY() const { return y; }
 Color Piece::getColor() const { return color; }
+PieceName Piece::getPieceName() const { return name; }
 void Piece::setPosition(int x, int y)
 {
     this->x = x;
     this->y = y;
+}
+
+char Piece::getSymbol()
+{
+    return (char)this->getPieceName();
 }
