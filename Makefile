@@ -1,6 +1,6 @@
 # Compiler und Flags
 CXX = g++
-CXXFLAGS = -I libraries/include -I src
+CXXFLAGS = -I libraries/include -I src/includes
 LDFLAGS = -L libraries/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 # Ziel und Quell-Dateien
